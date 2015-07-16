@@ -158,22 +158,6 @@ def main_game():
                       text="Score %s" % (rec),
                       font="Colibri 20",
                       fill="yellow")
-        #открываем файл, содержащий абсолютный рекорд игры
-        f = open('records.txt','r')
-        #считываем строчку
-        line = f.readline()
-        #приводим ее к целочисленному типу
-        record = int(line)
-        #закрываем файл
-        f.close()
-
-        #если количество очков, заработанных за текущую игру
-        #больше абсолютного рекорда, то перезаписываем
-        #абсолютный рекорд в файл
-        if rec > record:
-            f = open('records.txt','w')
-            f.write(str(rec))
-            f.close()
 
         #указатель на клавишу для перехода в меню
         c.create_text(WIDTH/5, HEIGHT-50,
@@ -185,7 +169,34 @@ def main_game():
                       text="[P] lay again",
                       font="Colibri 15",
                       fill="blue")
-    
+        fl_file = True
+        #проверка на наличие файла с рекордом
+        try:
+            #открываем файл, содержащий абсолютный рекорд игры
+            f = open('records.txt','r')
+        except IOError as e:
+            fl_file=False
+        else:
+          with f:
+            #считываем строчку
+            line = f.readline()
+            #приводим ее к целочисленному типу
+            record = int(line)
+            #если количество заработанных очков в текущей игре
+            #превосходит предыдущий рекорд, то обновляем его
+            if rec > record:
+              record = rec
+            #записываем его в файл
+            f.write(str(record))
+            #закрываем файл
+            f.close()
+
+        #если файла с рекордом не существует, то создаем его
+        #и записываем в него результат текущей игры
+        if fl_file == False:
+          f = open('records.txt', 'w')
+          f.write(str(rec))
+          f.close()
 #------------------------------------------------------------------------------------
 #создание "яблока"
 def create_block():
