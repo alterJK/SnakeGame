@@ -56,20 +56,31 @@ def main_records():
                       text="[O] k",
                       font="Colibri 20",
                       fill="white")
-  #открытие файла для считывания последнего рекорда
-  f = open ('records.txt','r')
-  #считывания числа, являющегося абсолютным рекордом игры
-  line = f.readline()
-  #закрытие файла
-  f.close()
 
   #подзаголовок поля рекорда "Абсолютный рекорд"
   c.create_text(WIDTH/2, HEIGHT - 350,
                       text="Absolute Record",
                       font="Colibri 40",
                       fill="red")
-  #вывод количества заработанных очков за текущую игру
-  c.create_text(WIDTH/2, HEIGHT - 250,
+
+  #проверка на наличие файла с рекордом
+  try:
+      #открываем файл, содержащий абсолютный рекорд игры
+      f = open('records.txt','r')
+  except IOError as e:
+          #вывод количества заработанных очков за текущую игру
+          c.create_text(WIDTH/2, HEIGHT - 250,
+          text=str(0),
+          font="Colibri 30",
+          fill="yellow") 
+  else:
+      with f:
+            #считывания числа, являющегося абсолютным рекордом игры
+            line = f.readline()
+            #закрытие файла
+            f.close()
+            #вывод количества заработанных очков за текущую игру
+            c.create_text(WIDTH/2, HEIGHT - 250,
                       text=line,
                       font="Colibri 30",
                       fill="yellow")
@@ -182,11 +193,14 @@ def main_game():
             line = f.readline()
             #приводим ее к целочисленному типу
             record = int(line)
+            f.close()
             #если количество заработанных очков в текущей игре
             #превосходит предыдущий рекорд, то обновляем его
             if rec > record:
-              record = rec
+              record = int(rec)
             #записываем его в файл
+            #открываем файл и записываем в него рекорд
+            f = open('records.txt','w')
             f.write(str(record))
             #закрываем файл
             f.close()
