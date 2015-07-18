@@ -198,6 +198,11 @@ def main_game():
             #превосходит предыдущий рекорд, то обновляем его
             if rec > record:
               record = int(rec)
+              #выдаем сообщение о новом рекорде
+              c.create_text(WIDTH/2, HEIGHT/2+100,
+                      text="New Record !",
+                      font="Colibri 30",
+                      fill="yellow")
             #записываем его в файл
             #открываем файл и записываем в него рекорд
             f = open('records.txt','w')
@@ -211,6 +216,11 @@ def main_game():
           f = open('records.txt', 'w')
           f.write(str(rec))
           f.close()
+          #выдаем сообщение о новом рекорде
+          c.create_text(WIDTH/2, HEIGHT/2+100,
+                      text="New Record !",
+                      font="Colibri 30",
+                      fill="yellow")
 #------------------------------------------------------------------------------------
 #создание "яблока"
 def create_block():
