@@ -9,6 +9,7 @@ HEIGHT = 500 #высота окна
 PART_SIZE = 25 #размер части змейки и яблока
 record = 0#рекорд из текстового файла
 rec = 0#количество очков текущей игры
+score = 0
     
 #------------------------------------------------------------------------------------
 #основная функция Menu
@@ -127,9 +128,25 @@ def main_game():
     global FL_GM # флаг состояния игры
     global rec # текущее число заработанных очков
     global record # абсолютный рекорд игры
+    global score
+
+    #выдаем количество заработанных очков
+    c.create_text(WIDTH/1.2, 50,
+                      text="Score",
+                      font="Colibri 20",
+                      fill="yellow")
+
+    c.delete(score)
     
     #проверка состояния игры
     if FL_GM:
+        #выдаем количество заработанных очков
+        
+        score = c.create_text(WIDTH/1.1 + 10, 50,
+                      text="%s" %rec ,
+                      font="Colibri 20",
+                      fill="yellow")
+        
         #перемещение змейки
         s.move()
         #определение начала змейки
@@ -139,10 +156,18 @@ def main_game():
         #проверка на столкновение змейки со стеной
         if x2 > WIDTH or x1 < 0 or y1 < 0 or y2 > HEIGHT:
             FL_GM = False
- 
+        
         # Поедание яблок 
         if head == c.coords(BLOCK):
+
             rec=int(rec+1)#увеличиваем число заработанных очков
+          
+            #выдаем количество заработанных очков
+            #score = c.create_text(WIDTH/1.1 + 10, 50,
+             #         text="%s" % rec,
+              #        font="Colibri 20",
+               #       fill="yellow")
+            
             s.add_segment()#увеличиваем длину змейки
             c.delete(BLOCK)#удаляем с поля съеденное яблоко
             create_block()#создаем новое яблоко на поле
@@ -164,6 +189,7 @@ def main_game():
                       text="GAME OVER !",
                       font="Colibri 50",
                       fill="red")
+
         #выдаем количество заработанных очков
         c.create_text(WIDTH/2, HEIGHT/2+50,
                       text="Score %s" % (rec),
@@ -180,6 +206,7 @@ def main_game():
                       text="[P] lay again",
                       font="Colibri 15",
                       fill="blue")
+
         fl_file = True
         #проверка на наличие файла с рекордом
         try:
@@ -286,7 +313,7 @@ class Snake(object):
         y = last_seg[3] - PART_SIZE
         #добавляем на это место сегмент
         a.parts.insert(0, Part(x, y))
-        
+
 #------------------------------------------------------------------------------------
 #подготовка окна для перехода в меню
 def menu(event):
@@ -326,6 +353,7 @@ def start(event):
     FL_GM = True
 
     #зануляем текущее количество очков
+    global rec
     rec = 0
 
     #реакция на нажатие кнопки
@@ -365,7 +393,7 @@ def restart(event):
     #флаг состояния игры
     global FL_GM
     FL_GM = True
-
+    rec = 0
     #функция начала игры
     start(event)
     
